@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FocusBoard</title>
+  <meta name="description" content="Адаптивный офлайн-сервис: Kanban, таймер фокуса, статистика. Без бэка и БД — localStorage + резерв в cookies." />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="top row">
+      <h1>FocusBoard</h1>
+      <div class="spacer"></div>
+      <button class="btn" id="themeBtn">🌓 Тема</button>
+      <button class="btn" id="exportBtn">⬇️ Экспорт</button>
+      <button class="btn" id="pdfBtn">📄 PDF</button>
+      <label class="btn" for="importInput" style="cursor:pointer">⬆️ Импорт</label>
+      <input id="importInput" type="file" accept="application/json" hidden />
+      <button class="btn danger" id="resetBtn" title="Стереть данные">🗑️</button>
+    </header>
+
+    <section class="card grid cols-3" aria-label="Добавить задачу">
+      <div>
+        <h2>Новая задача</h2>
+        <input id="taskTitle" placeholder="Что сделать?" />
+      </div>
+      <div>
+        <h2>Оценка (мин)</h2>
+        <input id="taskEst" type="number" min="5" step="5" value="25" />
+      </div>
+      <div class="row" style="align-items:end">
+        <button class="btn" id="addTaskBtn">➕ Добавить</button>
+      </div>
+    </section>
+
+    <section class="kanban" aria-label="Kanban доска">
+      <div class="card col">
+        <header>
+          <h2>📥 Todo</h2>
+          <span class="muted" id="todoCount"></span>
+        </header>
+        <div class="drop" data-col="todo"></div>
+      </div>
+      <div class="card col">
+        <header>
+          <h2>⚙️ Doing</h2>
+          <span class="muted" id="doingCount"></span>
+        </header>
+        <div class="drop" data-col="doing"></div>
+      </div>
+      <div class="card col">
+        <header>
+          <h2>✅ Done</h2>
+          <span class="muted" id="doneCount"></span>
+        </header>
+        <div class="drop" data-col="done"></div>
+      </div>
+    </section>
+
+    <section class="card grid" style="gap:16px" aria-label="Таймер фокуса">
+      <h2>Таймер фокуса</h2>
+      <div class="timer">
+        <select id="taskSelect"></select>
+        <div class="timebox"><span id="timeLeft">25:00</span></div>
+        <div class="row" style="justify-content:flex-end">
+          <button class="btn" id="startBtn">▶️ Старт</button>
+          <button class="btn" id="pauseBtn">⏸️ Пауза</button>
+          <button class="btn" id="resetTimerBtn">⟲ Сброс</button>
+        </div>
+      </div>
+      <div class="row">
+        <label style="display:flex;gap:6px;align-items:center">
+          Фокус (мин)
+          <input id="lenFocus" type="number" min="5" step="5" value="25" style="width:90px" />
+        </label>
+        <label style="display:flex;gap:6px;align-items:center">
+          Перерыв (мин)
+          <input id="lenBreak" type="number" min="5" step="5" value="5" style="width:90px" />
+        </label>
+        <div class="spacer"></div>
+        <span class="muted"><span class="kbd">Alt</span>+<span class="kbd">S</span> старт/пауза</span>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="Статистика">
+      <div class="card">
+        <h2>Фокус-время (мин) за 7 дней</h2>
+        <canvas id="chartFocus" height="160"></canvas>
+      </div>
+      <div class="card">
+        <h2>Завершено задач</h2>
+        <div class="row">
+          <div>
+            <strong id="doneToday">0</strong>
+            <div class="muted">сегодня</div>
+          </div>
+          <div style="width:1px;height:32px;background:var(--border);margin:0 12px"></div>
+          <div>
+            <strong id="doneWeek">0</strong>
+            <div class="muted">за 7 дней</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>© <span id="year"></span> FocusBoard</footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
